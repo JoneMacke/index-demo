@@ -1,0 +1,1122 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>购买入口 - 商城导购版</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --bg: #ffffff;
+      --text: #0f172a;
+      --muted: #667085;
+      --line: #ebeef2;
+      --line-strong: #e4e7ec;
+      --primary: #2563eb;
+      --primary-dark: #1d4ed8;
+      --gold: #f59e0b;
+      --gold-dark: #d97706;
+      --success: #16a34a;
+
+      --shadow-sm: 0 1px 2px rgba(16, 24, 40, 0.04);
+      --shadow-md: 0 12px 32px rgba(16, 24, 40, 0.08);
+      --shadow-lg: 0 20px 48px rgba(16, 24, 40, 0.12);
+
+      --radius-xl: 26px;
+      --radius-lg: 20px;
+      --radius-md: 16px;
+    }
+
+    html, body {
+      width: 100%;
+      min-height: 100%;
+      overflow-x: hidden;
+      background:
+        radial-gradient(circle at top, #f8fbff 0%, #ffffff 40%),
+        linear-gradient(180deg, #ffffff 0%, #fcfcfd 100%);
+      color: var(--text);
+    }
+
+    body {
+      font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        "PingFang SC", "Microsoft YaHei", sans-serif;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .page {
+      max-width: 1160px;
+      margin: 0 auto;
+      padding: 88px 22px 56px;
+    }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      border: 1px solid #e8eef8;
+      border-radius: 32px;
+      background:
+        radial-gradient(circle at 85% 15%, rgba(37,99,235,0.10) 0%, rgba(37,99,235,0) 26%),
+        radial-gradient(circle at 75% 30%, rgba(245,158,11,0.10) 0%, rgba(245,158,11,0) 18%),
+        linear-gradient(180deg, #ffffff 0%, #f8fbff 100%);
+      box-shadow: var(--shadow-md);
+      padding: 34px 32px 28px;
+      margin-bottom: 24px;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      height: 34px;
+      padding: 0 14px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.88);
+      border: 1px solid #e5edf8;
+      box-shadow: var(--shadow-sm);
+      color: #1d4ed8;
+      font-size: 12px;
+      font-weight: 800;
+      margin-bottom: 18px;
+    }
+
+    .hero h1 {
+      font-size: 48px;
+      line-height: 1.06;
+      letter-spacing: -1.8px;
+      font-weight: 850;
+      color: #101828;
+      max-width: 860px;
+      margin-bottom: 22px;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .hero-btn {
+      min-height: 48px;
+      padding: 0 18px;
+      border-radius: 999px;
+      border: 1px solid var(--line-strong);
+      background: rgba(255,255,255,0.96);
+      color: #111827;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      font-size: 14px;
+      font-weight: 800;
+      box-shadow: var(--shadow-sm);
+      transition: transform .2s ease, box-shadow .2s ease, background .2s ease;
+    }
+
+    .hero-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: var(--shadow-md);
+    }
+
+    .hero-btn.primary {
+      color: #fff;
+      border-color: var(--primary-dark);
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+      box-shadow: 0 14px 28px rgba(37, 99, 235, 0.24);
+    }
+
+    .hero-btn.gold {
+      color: #fff;
+      border-color: var(--gold-dark);
+      background: linear-gradient(135deg, var(--gold) 0%, var(--gold-dark) 100%);
+      box-shadow: 0 14px 28px rgba(245, 158, 11, 0.24);
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.4fr 0.6fr;
+      gap: 18px;
+      margin-top: 24px;
+    }
+
+    .endpoint-box,
+    .benefit-box,
+    .tips-section,
+    .usage-section {
+      border-radius: 24px;
+      border: 1px solid #e9eef5;
+      background: rgba(255,255,255,0.84);
+      backdrop-filter: blur(10px);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .endpoint-box {
+      padding: 18px;
+    }
+
+    .endpoint-label {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .endpoint-title {
+      font-size: 13px;
+      font-weight: 800;
+      color: #344054;
+    }
+
+    .endpoint-note {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .url-combo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-height: 60px;
+      padding: 8px;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: linear-gradient(180deg, #f8fafc 0%, #f4f7fb 100%);
+      margin-bottom: 12px;
+    }
+
+    .url-value {
+      flex: 1;
+      min-width: 0;
+      padding: 0 12px;
+      font-size: 15px;
+      color: #111827;
+      font-weight: 500;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .copy-inline-btn {
+      height: 44px;
+      padding: 0 16px;
+      border: 1px solid #e5e7eb;
+      border-radius: 14px;
+      background: rgba(255,255,255,0.92);
+      color: #111827;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      font-size: 14px;
+      font-weight: 800;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .copy-inline-btn svg {
+      width: 16px;
+      height: 16px;
+      stroke: currentColor;
+    }
+
+    .endpoint-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .mini-btn {
+      height: 42px;
+      padding: 0 15px;
+      border-radius: 999px;
+      border: 1px solid var(--line-strong);
+      background: #fff;
+      color: #111827;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .mini-btn.dark {
+      background: #111827;
+      color: #fff;
+      border-color: #111827;
+    }
+
+    .benefit-box {
+      padding: 18px;
+    }
+
+    .benefit-box h3 {
+      font-size: 14px;
+      font-weight: 800;
+      color: #111827;
+      margin-bottom: 10px;
+    }
+
+    .benefit-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .benefit-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: 14px;
+      color: #475467;
+      line-height: 1.75;
+    }
+
+    .benefit-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, #60a5fa 0%, #2563eb 100%);
+      margin-top: 8px;
+      flex-shrink: 0;
+    }
+
+    .section {
+      padding: 12px 0 34px;
+    }
+
+    .section-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      margin-bottom: 14px;
+    }
+
+    .section-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .section-badge {
+      display: inline-flex;
+      align-items: center;
+      height: 28px;
+      padding: 0 10px;
+      border-radius: 999px;
+      background: #eff6ff;
+      color: #1d4ed8;
+      border: 1px solid #dbeafe;
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .section-title {
+      font-size: 24px;
+      font-weight: 850;
+      color: #111827;
+      letter-spacing: -0.4px;
+    }
+
+    .section-desc {
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.9;
+      margin-bottom: 20px;
+      max-width: 760px;
+    }
+
+    .shop-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+      align-items: stretch;
+    }
+
+    .shop-card {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      min-height: 100%;
+      border-radius: 26px;
+      padding: 22px;
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow-sm);
+      overflow: hidden;
+      transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease;
+    }
+
+    .shop-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-md);
+    }
+
+    .shop-card.main {
+      background: linear-gradient(180deg, #f8fbff 0%, #eef5ff 100%);
+      border-color: #dbe7ff;
+    }
+
+    .shop-card.discount {
+      background: linear-gradient(180deg, #fffdf8 0%, #fff7e8 100%);
+      border-color: #f3dfad;
+    }
+
+    .shop-card.biz {
+      background: linear-gradient(180deg, #fbfbfc 0%, #f4f6f8 100%);
+      border-color: #dfe3e8;
+    }
+
+    .ribbon,
+    .ribbon-gold {
+      position: absolute;
+      top: 12px;
+      right: -34px;
+      transform: rotate(35deg);
+      color: #fff;
+      font-size: 11px;
+      font-weight: 800;
+      padding: 6px 40px;
+      z-index: 2;
+      letter-spacing: .2px;
+    }
+
+    .ribbon {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+      box-shadow: 0 8px 18px rgba(37, 99, 235, 0.22);
+    }
+
+    .ribbon-gold {
+      background: linear-gradient(135deg, var(--gold) 0%, var(--gold-dark) 100%);
+      box-shadow: 0 8px 18px rgba(245, 158, 11, 0.24);
+    }
+
+    .shop-head {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+      padding-right: 34px;
+    }
+
+    .shop-icon {
+      width: 54px;
+      height: 54px;
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.65);
+    }
+
+    .shop-icon svg {
+      width: 26px;
+      height: 26px;
+    }
+
+    .shop-icon.main {
+      background: linear-gradient(180deg, #ffffff 0%, #e8f1ff 100%);
+      border: 1px solid #d7e7ff;
+      color: var(--primary);
+    }
+
+    .shop-icon.discount {
+      background: linear-gradient(180deg, #fffaf1 0%, #ffe9c7 100%);
+      border: 1px solid #f7dba0;
+      color: var(--gold-dark);
+    }
+
+    .shop-icon.biz {
+      background: linear-gradient(180deg, #ffffff 0%, #edf2f7 100%);
+      border: 1px solid #dce3ea;
+      color: #475467;
+    }
+
+    .shop-name {
+      font-size: 22px;
+      line-height: 1.2;
+      font-weight: 800;
+      color: #101828;
+      letter-spacing: -0.4px;
+    }
+
+    .shop-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+
+    .shop-tag {
+      display: inline-flex;
+      align-items: center;
+      height: 28px;
+      padding: 0 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 700;
+      border: 1px solid rgba(255,255,255,0.92);
+      background: rgba(255,255,255,0.78);
+      color: #475467;
+    }
+
+    .adv-box {
+      border: 1px solid rgba(255,255,255,0.9);
+      background: rgba(255,255,255,0.68);
+      border-radius: 18px;
+      padding: 14px;
+      margin-bottom: 16px;
+    }
+
+    .adv-title {
+      font-size: 13px;
+      font-weight: 800;
+      color: #111827;
+      margin-bottom: 10px;
+    }
+
+    .adv-list {
+      display: grid;
+      gap: 8px;
+    }
+
+    .adv-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      color: #475467;
+      font-size: 13px;
+      line-height: 1.65;
+    }
+
+    .adv-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: #60a5fa;
+      flex-shrink: 0;
+      margin-top: 7px;
+    }
+
+    .adv-dot.gold {
+      background: #f59e0b;
+    }
+
+    .adv-dot.gray {
+      background: #94a3b8;
+    }
+
+    .shop-footer {
+      margin-top: auto;
+    }
+
+    .cta-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .cta-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      min-height: 46px;
+      padding: 10px 16px;
+      border-radius: 999px;
+      font-size: 14px;
+      font-weight: 800;
+      border: 1px solid rgba(255,255,255,0.94);
+      background: rgba(255,255,255,0.88);
+      color: #111827;
+      transition: transform .18s ease, box-shadow .18s ease, background .18s ease;
+    }
+
+    .cta-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 10px 20px rgba(16, 24, 40, 0.06);
+      background: rgba(255,255,255,0.96);
+    }
+
+    .cta-btn.main {
+      color: #fff;
+      border-color: var(--primary-dark);
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+      box-shadow: 0 14px 28px rgba(37, 99, 235, 0.20);
+    }
+
+    .cta-btn.gold {
+      color: #fff;
+      border-color: var(--gold-dark);
+      background: linear-gradient(135deg, var(--gold) 0%, var(--gold-dark) 100%);
+      box-shadow: 0 14px 28px rgba(245, 158, 11, 0.20);
+    }
+
+    .cta-btn span {
+      transition: transform .18s ease;
+    }
+
+    .cta-btn:hover span {
+      transform: translateX(2px);
+    }
+
+    .market-grid {
+      display: grid;
+      gap: 10px;
+    }
+
+    .market-entry {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 14px;
+      border-radius: 18px;
+      border: 1px solid rgba(255,255,255,0.94);
+      background: rgba(255,255,255,0.8);
+      transition: transform .2s ease, box-shadow .2s ease, background .2s ease;
+    }
+
+    .market-entry:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 24px rgba(16, 24, 40, 0.06);
+      background: rgba(255,255,255,0.95);
+    }
+
+    .market-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 0;
+    }
+
+    .mini-platform {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 15px;
+      font-weight: 800;
+      color: #fff;
+      flex-shrink: 0;
+    }
+
+    .mini-platform.taobao {
+      background: linear-gradient(135deg, #ff7a00 0%, #ff4d00 100%);
+    }
+
+    .mini-platform.rednote {
+      background: linear-gradient(135deg, #ff4d6d 0%, #ff6b81 100%);
+    }
+
+    .market-name {
+      font-size: 14px;
+      font-weight: 800;
+      color: #111827;
+      margin-bottom: 3px;
+    }
+
+    .market-desc {
+      font-size: 12px;
+      color: #667085;
+      line-height: 1.55;
+    }
+
+    .market-tag {
+      display: inline-flex;
+      align-items: center;
+      height: 26px;
+      padding: 0 10px;
+      border-radius: 999px;
+      background: #fff;
+      border: 1px solid #efefef;
+      color: #475467;
+      font-size: 12px;
+      font-weight: 700;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .tips-section {
+      margin-top: 18px;
+      padding: 20px;
+    }
+
+    .tips-title {
+      font-size: 16px;
+      font-weight: 800;
+      color: #111827;
+      margin-bottom: 12px;
+    }
+
+    .tips-list {
+      display: grid;
+      gap: 10px;
+      color: #475467;
+      font-size: 14px;
+      line-height: 1.8;
+    }
+
+    .tips-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+    }
+
+    .tips-item i {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: #111827;
+      margin-top: 8px;
+      flex-shrink: 0;
+    }
+
+    .usage-section {
+      margin-top: 18px;
+      padding: 22px 20px;
+    }
+
+    .usage-title {
+      font-size: 16px;
+      font-weight: 800;
+      color: #111827;
+      margin-bottom: 12px;
+    }
+
+    .usage-content {
+      display: grid;
+      gap: 10px;
+      color: #475467;
+      font-size: 14px;
+      line-height: 1.9;
+    }
+
+    .usage-content ul {
+      margin-left: 18px;
+      color: #475467;
+    }
+
+    .usage-content a {
+      color: var(--primary);
+      text-decoration: underline;
+      font-weight: 600;
+    }
+
+    .toast-wrap {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 9999;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      pointer-events: none;
+    }
+
+    .toast {
+      min-width: 240px;
+      max-width: 360px;
+      padding: 14px 16px;
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,0.72);
+      background: rgba(17, 24, 39, 0.88);
+      color: #fff;
+      box-shadow: var(--shadow-lg);
+      backdrop-filter: blur(14px);
+      transform: translateY(-8px);
+      opacity: 0;
+      transition: opacity .22s ease, transform .22s ease;
+      pointer-events: auto;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .toast-title {
+      font-size: 13px;
+      font-weight: 800;
+      margin-bottom: 4px;
+    }
+
+    .toast-text {
+      font-size: 13px;
+      line-height: 1.65;
+      color: rgba(255,255,255,0.82);
+      word-break: break-all;
+    }
+
+    @media (max-width: 980px) {
+      .hero h1 {
+        font-size: 38px;
+        letter-spacing: -1.2px;
+      }
+
+      .hero-grid,
+      .shop-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .page {
+        padding: 64px 16px 40px;
+      }
+
+      .hero {
+        border-radius: 24px;
+        padding: 22px 18px 18px;
+      }
+
+      .hero h1 {
+        font-size: 30px;
+        letter-spacing: -0.8px;
+      }
+
+      .hero-actions,
+      .endpoint-actions,
+      .cta-row {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .hero-btn,
+      .mini-btn,
+      .cta-btn,
+      .copy-inline-btn {
+        width: 100%;
+      }
+
+      .url-combo {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .shop-card {
+        padding: 18px;
+        border-radius: 22px;
+      }
+
+      .shop-head {
+        padding-right: 18px;
+      }
+
+      .shop-name {
+        font-size: 20px;
+      }
+
+      .ribbon,
+      .ribbon-gold {
+        top: 10px;
+        right: -40px;
+        font-size: 10px;
+        padding: 6px 42px;
+      }
+
+      .market-entry {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .toast-wrap {
+        top: 14px;
+        left: 14px;
+        right: 14px;
+      }
+
+      .toast {
+        min-width: auto;
+        max-width: none;
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="toast-wrap" id="toastWrap"></div>
+
+  <main class="page">
+    <section class="hero">
+      <div class="hero-badge">购买导航 · 多入口下单</div>
+      <h1>选择适合你的购买方式，快速下单，稳定开通。</h1>
+
+      <div class="hero-actions">
+        <a href="https://xhslink.com/m/4UeAaHivZrI" target="_blank" class="hero-btn primary">官方购买入口</a>
+        <a href="#discount-channel" class="hero-btn gold">查看限时优惠</a>
+        <a href="https://qm.qq.com/q/J6TwLanrua" class="hero-btn" style="background: linear-gradient(135deg, #16a34a 0%, #15803d 100%); color: #fff; border-color: #15803d; box-shadow: 0 14px 28px rgba(22, 163, 74, 0.24);">加入社区</a>
+      </div>
+
+      <div class="hero-grid">
+        <div class="endpoint-box">
+          <div class="endpoint-label">
+            <div class="endpoint-title">接口地址</div>
+            <div class="endpoint-note">OpenAI Compatible</div>
+          </div>
+
+          <div class="url-combo">
+            <div class="url-value" id="apiUrlText">https://api.katioai.com/v1</div>
+            <button class="copy-inline-btn" onclick="copyApi()" aria-label="复制地址">
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="2">
+                <rect x="9" y="9" width="10" height="10" rx="2"></rect>
+                <path d="M5 15V7a2 2 0 0 1 2-2h8"></path>
+              </svg>
+              复制地址
+            </button>
+          </div>
+
+          <div class="endpoint-actions">
+            <a href="https://docs.katioai.com/" target="_blank" class="mini-btn" style="background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%); color: #fff; border-color: #7c3aed;">使用指南</a>
+            <a href="https://api.katioai.com/console" target="_blank" class="mini-btn dark">进入控制台</a>
+          </div>
+        </div>
+
+        <div class="benefit-box">
+          <h3>购买优势</h3>
+          <div class="benefit-list">
+            <div class="benefit-item"><span class="benefit-dot"></span>支持自助购买，流程更直接</div>
+            <div class="benefit-item"><span class="benefit-dot"></span>多平台入口可选，便于比价</div>
+            <div class="benefit-item"><span class="benefit-dot"></span>支持售后协助与企业沟通</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <div class="section-left">
+          <span class="section-badge">导购推荐</span>
+          <div class="section-title">购买渠道</div>
+        </div>
+      </div>
+
+      <p class="section-desc">
+        不同渠道适合不同用户：如果你想快速开通，推荐直接使用官方自助商城；
+        如果你更关注活动与优惠，可优先查看渠道入口；
+        如需团队采购、长期合作或系统接入，可选择企业咨询。
+      </p>
+
+      <div class="shop-grid">
+        <div class="shop-card main">
+          <div class="ribbon">官方推荐</div>
+
+          <div class="shop-head">
+            <div class="shop-icon main">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M6 8h12l-1 10H7L6 8Z"></path>
+                <path d="M9 8a3 3 0 0 1 6 0"></path>
+              </svg>
+            </div>
+            <div class="shop-name">自助商城</div>
+          </div>
+
+          <div class="shop-tags">
+            <span class="shop-tag">官方推荐</span>
+            <span class="shop-tag">自动发货</span>
+            <span class="shop-tag">稳定开通</span>
+          </div>
+
+          <div class="adv-box">
+            <div class="adv-title">适合人群</div>
+            <div class="adv-list">
+              <div class="adv-item"><span class="adv-dot"></span>想快速下单并立即开始使用的用户</div>
+              <div class="adv-item"><span class="adv-dot"></span>希望流程直接、购买步骤更少的用户</div>
+              <div class="adv-item"><span class="adv-dot"></span>适合日常补量、长期稳定复购场景</div>
+            </div>
+          </div>
+
+          <div class="shop-footer">
+            <div class="cta-row">
+              <a href="https://68n.cn/PZkYw" target="_blank" class="cta-btn main">
+                立即前往购买 <span>→</span>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div class="shop-card discount" id="discount-channel">
+          <div class="ribbon-gold">限时优惠</div>
+
+          <div class="shop-head">
+            <div class="shop-icon discount">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M4 10h16"></path>
+                <path d="M6 10V7a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v3"></path>
+                <rect x="5" y="10" width="14" height="9" rx="2"></rect>
+              </svg>
+            </div>
+            <div class="shop-name">渠道优惠</div>
+          </div>
+
+          <div class="shop-tags">
+            <span class="shop-tag">平台购买</span>
+            <span class="shop-tag">优惠活动</span>
+            <span class="shop-tag">售后协助</span>
+          </div>
+
+          <div class="adv-box">
+            <div class="adv-title">适合人群</div>
+            <div class="adv-list">
+              <div class="adv-item"><span class="adv-dot gold"></span>喜欢在熟悉平台内完成下单的用户</div>
+              <div class="adv-item"><span class="adv-dot gold"></span>希望对比活动力度与价格优惠的用户</div>
+              <div class="adv-item"><span class="adv-dot gold"></span>适合结合平台习惯选择购买入口</div>
+            </div>
+          </div>
+
+          <div class="shop-footer">
+            <div class="market-grid">
+              <a href="https://xhslink.com/m/4UeAaHivZrI" target="_blank" class="market-entry">
+                <div class="market-left">
+                  <div class="mini-platform rednote">薯</div>
+                  <div>
+                    <div class="market-name">红薯</div>
+                    <div class="market-desc">适合内容导购与口碑参考,选择更灵活</div>
+                  </div>
+                </div>
+                <div class="market-tag">去看看</div>
+              </a>
+
+              <a href="#" target="_blank" class="market-entry">
+                <div class="market-left">
+                  <div class="mini-platform rednote">薯</div>
+                  <div>
+                    <div class="market-name">红薯</div>
+                    <div class="market-desc">适合内容导购与口碑参考，选择更灵活</div>
+                  </div>
+                </div>
+                <div class="market-tag">去看看</div>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div class="shop-card biz">
+          <div class="shop-head">
+            <div class="shop-icon biz">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="4" y="7" width="16" height="12" rx="2"></rect>
+                <path d="M9 7V5h6v2"></path>
+                <path d="M4 12h16"></path>
+              </svg>
+            </div>
+            <div class="shop-name">团队 / 企业</div>
+          </div>
+
+          <div class="shop-tags">
+            <span class="shop-tag">专属对接</span>
+            <span class="shop-tag">团队采购</span>
+            <span class="shop-tag">定制支持</span>
+          </div>
+
+          <div class="adv-box">
+            <div class="adv-title">适合人群</div>
+            <div class="adv-list">
+              <div class="adv-item"><span class="adv-dot gray"></span>有团队协作、统一采购或权限管理需求</div>
+              <div class="adv-item"><span class="adv-dot gray"></span>有项目接入、长期使用或合作沟通需求</div>
+              <div class="adv-item"><span class="adv-dot gray"></span>适合中大型业务、系统集成与定制支持</div>
+            </div>
+          </div>
+
+          <div class="shop-footer">
+            <div class="cta-row">
+              <a href="https://qm.qq.com/q/YJcxgkmscq" class="cta-btn">
+                联系企业咨询 <span>→</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tips-section">
+        <div class="tips-title">下单建议</div>
+        <div class="tips-list">
+          <div class="tips-item"><i></i><div>如果你希望最快完成购买，优先选择 <strong>自助商城</strong>。</div></div>
+          <div class="tips-item"><i></i><div>如果你更在意平台活动与优惠力度，优先查看 <strong>渠道优惠</strong>。</div></div>
+          <div class="tips-item"><i></i><div>如果你是团队、公司或有长期合作需求，建议直接走 <strong>企业咨询</strong>。</div></div>
+        </div>
+      </div>
+
+      <div class="usage-section">
+        <div class="usage-title">使用说明</div>
+        <div class="usage-content">
+          <p>
+            平台仅支持合法、合规、正当用途。请勿利用 AI 服务从事仿冒、欺诈、谣言传播、
+            违法低俗内容生成等违规行为。
+          </p>
+          <ul>
+            <li>禁止用于误导传播、违规营销和灰黑产场景</li>
+            <li>禁止冒充他人或组织实施违规行为</li>
+            <li>禁止生成违法、暴力、色情等违规内容</li>
+            <li>平台将依据规则和法律法规处理违规使用行为</li>
+          </ul>
+          <p>
+            更多要求可参考
+            <a href="https://www.cac.gov.cn/" target="_blank">相关政策说明</a>
+          </p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    function showToast(title, text) {
+      const wrap = document.getElementById('toastWrap');
+      const toast = document.createElement('div');
+      toast.className = 'toast';
+      toast.innerHTML = `
+        <div class="toast-title">${title}</div>
+        <div class="toast-text">${text}</div>
+      `;
+      wrap.appendChild(toast);
+
+      requestAnimationFrame(() => {
+        toast.classList.add('show');
+      });
+
+      setTimeout(() => {
+        toast.classList.remove('show');
+        setTimeout(() => {
+          toast.remove();
+          sendHeight();
+        }, 220);
+      }, 2200);
+    }
+
+    async function copyApi() {
+      const text = document.getElementById('apiUrlText').textContent.trim();
+      try {
+        await navigator.clipboard.writeText(text);
+        showToast('复制成功', '接口地址已复制：' + text);
+      } catch (e) {
+        showToast('复制失败', '当前环境不支持自动复制，请手动复制接口地址。');
+      }
+    }
+
+    function sendHeight() {
+      const height = document.documentElement.scrollHeight;
+      if (window.parent && window.parent !== window) {
+        parent.postMessage({ type: 'embed-height', height }, '*');
+      }
+    }
+
+    window.addEventListener('load', sendHeight);
+    window.addEventListener('resize', sendHeight);
+    setTimeout(sendHeight, 300);
+    setTimeout(sendHeight, 1000);
+  </script>
+</body>
+</html>
